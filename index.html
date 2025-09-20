@@ -107,7 +107,6 @@
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.2s ease;
-            margin-top: 10px;
         }
 
         .form-input:focus {
@@ -149,12 +148,6 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .progress-bar {
             height: 4px;
             background: rgba(255,255,255,0.3);
@@ -172,30 +165,6 @@
 
         .hidden {
             display: none;
-        }
-
-        .success-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            z-index: 1000;
-            max-width: 400px;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
         }
 
         @media (max-width: 600px) {
@@ -233,6 +202,7 @@
 
             <!-- Questions CLIENT -->
             <div id="questionsClient">
+                <!-- Question 1: Profil CLIENT -->
                 <div class="question-block">
                     <div class="question-title">1. Tu as quel âge et tu vis où ? 👤</div>
                     <div class="quick-select" data-question="age">
@@ -244,6 +214,7 @@
                     <input type="text" class="form-input" name="ville" placeholder="Ta ville (ex: Montpellier, Lyon...)" required>
                 </div>
 
+                <!-- Question 2: Habitudes CLIENT -->
                 <div class="question-block">
                     <div class="question-title">2. Tu sors en bar combien de fois ? 🍻</div>
                     <div class="quick-select" data-question="frequence">
@@ -255,6 +226,7 @@
                     </div>
                 </div>
 
+                <!-- Question 3: Recherche actuelle CLIENT -->
                 <div class="question-block">
                     <div class="question-title">3. Comment tu trouves tes bars actuellement ? 🔍</div>
                     <div class="quick-select" data-question="recherche" data-multiple="true">
@@ -269,10 +241,11 @@
 
             <!-- Questions PROPRIETAIRE -->
             <div id="questionsProprietaire" class="hidden">
+                <!-- Question 1: Profil BAR -->
                 <div class="question-block">
                     <div class="question-title">1. Ton bar c'est quoi ? 🏪</div>
                     <input type="text" class="form-input" name="nom_bar" placeholder="Nom de ton établissement">
-                    <div class="quick-select" data-question="type_bar">
+                    <div class="quick-select" data-question="type_bar" style="margin-top: 10px;">
                         <button type="button" class="quick-btn" data-value="pub">Pub</button>
                         <button type="button" class="quick-btn" data-value="cocktails">Bar à cocktails</button>
                         <button type="button" class="quick-btn" data-value="brasserie">Brasserie</button>
@@ -282,10 +255,11 @@
                     </div>
                 </div>
 
+                <!-- Question 2: Localisation BAR -->
                 <div class="question-block">
                     <div class="question-title">2. Où es-tu situé ? 📍</div>
                     <input type="text" class="form-input" name="ville_bar" placeholder="Ville de ton bar" required>
-                    <div class="quick-select" data-question="zone_bar">
+                    <div class="quick-select" data-question="zone_bar" style="margin-top: 10px;">
                         <button type="button" class="quick-btn" data-value="centre-ville">Centre-ville</button>
                         <button type="button" class="quick-btn" data-value="quartier-etudiant">Quartier étudiant</button>
                         <button type="button" class="quick-btn" data-value="quartier-affaires">Quartier affaires</button>
@@ -293,6 +267,7 @@
                     </div>
                 </div>
 
+                <!-- Question 3: Clientèle BAR -->
                 <div class="question-block">
                     <div class="question-title">3. Ta clientèle principale ? 👥</div>
                     <div class="quick-select" data-question="clientele_bar" data-multiple="true">
@@ -304,6 +279,7 @@
                     </div>
                 </div>
 
+                <!-- Question 4: Marketing actuel BAR -->
                 <div class="question-block">
                     <div class="question-title">4. Comment tu attires tes clients actuellement ? 📢</div>
                     <div class="quick-select" data-question="marketing_actuel" data-multiple="true">
@@ -316,6 +292,7 @@
                     </div>
                 </div>
 
+                <!-- Question 5: Budget marketing BAR -->
                 <div class="question-block">
                     <div class="question-title">5. Budget marketing/mois ? 💰</div>
                     <div class="quick-select" data-question="budget_marketing">
@@ -326,6 +303,7 @@
                     </div>
                 </div>
 
+                <!-- Question 6: Problèmes actuels BAR -->
                 <div class="question-block">
                     <div class="question-title">6. Tes plus gros défis ? ⚡</div>
                     <div class="quick-select" data-question="defis_bar" data-multiple="true">
@@ -339,14 +317,14 @@
                 </div>
             </div>
 
-            <!-- Concept SOIF -->
+            <!-- Concept SOIF - ADAPTATIF -->
             <div class="concept-box">
                 <div class="concept-title">💡 Concept SOIF</div>
                 <div id="conceptClient">
                     <p style="font-size: 0.9rem; line-height: 1.4;">
                         Une app qui trouve TON bar idéal avec 140+ filtres ultra-précis 
                         (ambiance, musique, clientèle...) + réseau social géolocalisé 
-                        pour retrouver tes amis en temps réel 📱
+                        pour retrouver tes amis en temps réel 📍
                     </p>
                 </div>
                 <div id="conceptProprietaire" class="hidden">
@@ -358,15 +336,17 @@
                 </div>
             </div>
 
-            <!-- Question INTERET -->
+            <!-- Question INTERET - ADAPTATIF -->
             <div class="question-block">
                 <div class="question-title" id="questionInteret">4. Ça te branche ? 🚀</div>
+                <!-- Pour clients -->
                 <div class="quick-select" data-question="interet" id="interetClient">
                     <button type="button" class="quick-btn" data-value="tres-interesse">Je télécharge direct !</button>
                     <button type="button" class="quick-btn" data-value="interesse">Je testerais</button>
                     <button type="button" class="quick-btn" data-value="neutre">Peut-être</button>
                     <button type="button" class="quick-btn" data-value="peu-interesse">Pas fou</button>
                 </div>
+                <!-- Pour propriétaires -->
                 <div class="quick-select" data-question="interet_bar" id="interetProprietaire" class="hidden">
                     <button type="button" class="quick-btn" data-value="tres-interesse">Je veux tester en priorité !</button>
                     <button type="button" class="quick-btn" data-value="interesse">Ça m'intéresse</button>
@@ -375,15 +355,17 @@
                 </div>
             </div>
 
-            <!-- Question FONCTIONNALITES -->
+            <!-- Question FONCTIONNALITES - ADAPTATIF -->
             <div class="question-block">
                 <div class="question-title" id="questionFonctionnalites">5. Qu'est-ce qui te fait le plus envie ? ⭐</div>
+                <!-- Pour clients -->
                 <div class="quick-select" data-question="fonctionnalites" data-multiple="true" id="fonctionnalitesClient">
                     <button type="button" class="quick-btn" data-value="filtres">140+ filtres précis</button>
                     <button type="button" class="quick-btn" data-value="amis-geo">Amis géolocalisés</button>
                     <button type="button" class="quick-btn" data-value="evenements">Événements</button>
                     <button type="button" class="quick-btn" data-value="scanner">Scanner menus</button>
                 </div>
+                <!-- Pour propriétaires -->
                 <div class="quick-select" data-question="fonctionnalites_bar" data-multiple="true" id="fonctionnalitesProprietaire" class="hidden">
                     <button type="button" class="quick-btn" data-value="clientele-ciblee">Clientèle ciblée</button>
                     <button type="button" class="quick-btn" data-value="analytics">Analytics détaillés</button>
@@ -394,15 +376,17 @@
                 </div>
             </div>
 
-            <!-- Question PRIX -->
+            <!-- Question PRIX - ADAPTATIF -->
             <div class="question-block">
                 <div class="question-title" id="questionPrix">6. Tu paierais combien ? 💰</div>
+                <!-- Pour clients -->
                 <div class="quick-select" data-question="prix" id="prixClient">
                     <button type="button" class="quick-btn" data-value="5-euros">5€/an</button>
                     <button type="button" class="quick-btn" data-value="10-euros">10€/an</button>
                     <button type="button" class="quick-btn" data-value="gratuit">Que gratuit</button>
                     <button type="button" class="quick-btn" data-value="pub-ok">Gratuit + pub OK</button>
                 </div>
+                <!-- Pour propriétaires -->
                 <div class="quick-select" data-question="prix_bar" id="prixProprietaire" class="hidden">
                     <button type="button" class="quick-btn" data-value="20-euros">20€/mois<br><small>Fiche bar</small></button>
                     <button type="button" class="quick-btn" data-value="50-euros">50€/mois<br><small>+ Événements</small></button>
@@ -411,9 +395,10 @@
                 </div>
             </div>
 
-            <!-- Question 7 -->
+            <!-- Question 7: Géolocalisation (CLIENTS) ou ROI (PROPRIETAIRES) -->
             <div class="question-block">
                 <div class="question-title" id="question7">7. Question spécifique 📱</div>
+                <!-- Pour clients -->
                 <div id="question7Client">
                     <div class="question-title">Recevoir une notif quand tes amis sont dans un bar près de toi ?</div>
                     <div class="quick-select" data-question="notifications">
@@ -422,6 +407,7 @@
                         <button type="button" class="quick-btn" data-value="non-prive">Non, trop privé</button>
                     </div>
                 </div>
+                <!-- Pour propriétaires -->
                 <div id="question7Proprietaire" class="hidden">
                     <div class="question-title">Combien de nouveaux clients/mois tu veux attirer via SOIF ?</div>
                     <div class="quick-select" data-question="objectif_clients">
@@ -433,7 +419,7 @@
                 </div>
             </div>
 
-            <!-- Question 8 -->
+            <!-- Question 8: Recommandation -->
             <div class="question-block">
                 <div class="question-title">8. Tu recommanderais SOIF à tes amis ? 🔥</div>
                 <div class="quick-select" data-question="recommandation">
@@ -444,10 +430,10 @@
                 </div>
             </div>
 
-            <!-- Email et Contact -->
+            <!-- Contact et Email -->
             <div class="question-block">
                 <div class="question-title">9. Ton email pour qu'on te tienne au courant ? 📧</div>
-                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" required>
+                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" required style="margin-bottom: 10px;">
                 <div class="quick-select" data-question="contact">
                     <button type="button" class="quick-btn" data-value="beta">Oui + bêta test prioritaire</button>
                     <button type="button" class="quick-btn" data-value="infos">Juste les infos de lancement</button>
@@ -467,279 +453,239 @@
 
     <script>
         const formData = {};
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLO9nGFfoydcjYRYrCoR5F4JYkp1Krjge2XdBOvqmm2EQPXdvQLX2RU6sbMnOd38vT_g/exec';
+        let answeredQuestions = 0;
+        const totalQuestions = 8;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('SOIF Questionnaire initialisé');
-            setupEventListeners();
-        });
-
-        function setupEventListeners() {
-            document.querySelectorAll('.quick-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    handleButtonClick(this);
-                });
-            });
-
-            document.querySelectorAll('input[type="text"], input[type="email"]').forEach(input => {
-                input.addEventListener('input', function() {
-                    formData[this.name] = this.value;
-                    updateProgress();
-                });
-            });
-
-            document.getElementById('quickForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                handleFormSubmit(e);
-            });
-        }
-
-        function handleButtonClick(btn) {
-            const questionGroup = btn.closest('.quick-select');
-            const questionName = questionGroup.dataset.question;
-            const value = btn.dataset.value;
-            const isMultiple = questionGroup.dataset.multiple === 'true';
-            
-            if (isMultiple) {
-                btn.classList.toggle('selected');
-                if (!formData[questionName]) formData[questionName] = [];
+        // Gestion du type de profil
+        document.querySelectorAll('[data-question="profil_type"] .quick-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const profilType = this.dataset.value;
                 
-                if (btn.classList.contains('selected')) {
-                    if (!formData[questionName].includes(value)) {
-                        formData[questionName].push(value);
+                // Cacher/Afficher les sections appropriées
+                if (profilType === 'proprietaire' || profilType === 'employe') {
+                    document.getElementById('questionsClient').classList.add('hidden');
+                    document.getElementById('questionsProprietaire').classList.remove('hidden');
+                    
+                    document.getElementById('conceptClient').classList.add('hidden');
+                    document.getElementById('conceptProprietaire').classList.remove('hidden');
+                    
+                    document.getElementById('interetClient').classList.add('hidden');
+                    document.getElementById('interetProprietaire').classList.remove('hidden');
+                    
+                    document.getElementById('fonctionnalitesClient').classList.add('hidden');
+                    document.getElementById('fonctionnalitesProprietaire').classList.remove('hidden');
+                    
+                    document.getElementById('prixClient').classList.add('hidden');
+                    document.getElementById('prixProprietaire').classList.remove('hidden');
+                    
+                    document.getElementById('question7Client').classList.add('hidden');
+                    document.getElementById('question7Proprietaire').classList.remove('hidden');
+                    
+                    // Mettre à jour les titres
+                    document.getElementById('questionInteret').textContent = '4. SOIF pour ton business ? 🚀';
+                    document.getElementById('questionFonctionnalites').textContent = '5. Quels outils t\'intéressent le plus ? ⭐';
+                    document.getElementById('questionPrix').textContent = '6. Quel budget marketing/mois ? 💰';
+                    
+                } else {
+                    document.getElementById('questionsClient').classList.remove('hidden');
+                    document.getElementById('questionsProprietaire').classList.add('hidden');
+                    
+                    document.getElementById('conceptClient').classList.remove('hidden');
+                    document.getElementById('conceptProprietaire').classList.add('hidden');
+                    
+                    document.getElementById('interetClient').classList.remove('hidden');
+                    document.getElementById('interetProprietaire').classList.add('hidden');
+                    
+                    document.getElementById('fonctionnalitesClient').classList.remove('hidden');
+                    document.getElementById('fonctionnalitesProprietaire').classList.add('hidden');
+                    
+                    document.getElementById('prixClient').classList.remove('hidden');
+                    document.getElementById('prixProprietaire').classList.add('hidden');
+                    
+                    document.getElementById('question7Client').classList.remove('hidden');
+                    document.getElementById('question7Proprietaire').classList.add('hidden');
+                    
+                    // Remettre les titres clients
+                    document.getElementById('questionInteret').textContent = '4. Ça te branche ? 🚀';
+                    document.getElementById('questionFonctionnalites').textContent = '5. Qu\'est-ce qui te fait le plus envie ? ⭐';
+                    document.getElementById('questionPrix').textContent = '6. Tu paierais combien ? 💰';
+                }
+            });
+        });
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const questionGroup = this.closest('.quick-select');
+                const questionName = questionGroup.dataset.question;
+                const value = this.dataset.value;
+                const isMultiple = questionGroup.dataset.multiple === 'true';
+                
+                if (isMultiple) {
+                    // Multi-sélection
+                    this.classList.toggle('selected');
+                    if (!formData[questionName]) formData[questionName] = [];
+                    
+                    if (this.classList.contains('selected')) {
+                        if (!formData[questionName].includes(value)) {
+                            formData[questionName].push(value);
+                        }
+                    } else {
+                        formData[questionName] = formData[questionName].filter(v => v !== value);
                     }
                 } else {
-                    formData[questionName] = formData[questionName].filter(v => v !== value);
+                    // Sélection unique
+                    questionGroup.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    formData[questionName] = value;
                 }
-            } else {
-                questionGroup.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                formData[questionName] = value;
                 
-                if (questionName === 'profil_type') {
-                    handleProfilTypeSelection(value);
-                    return;
-                }
-            }
-            
-            updateProgress();
-        }
+                // Afficher email si nécessaire - SUPPRIMÉ car email toujours visible
+                
+                updateProgress();
+            });
+        });
 
-        function handleProfilTypeSelection(profilType) {
-            formData.profil_type = profilType;
-            
-            if (profilType === 'proprietaire' || profilType === 'employe') {
-                document.getElementById('questionsClient').classList.add('hidden');
-                document.getElementById('questionsProprietaire').classList.remove('hidden');
-                
-                document.getElementById('conceptClient').classList.add('hidden');
-                document.getElementById('conceptProprietaire').classList.remove('hidden');
-                
-                document.getElementById('interetClient').classList.add('hidden');
-                document.getElementById('interetProprietaire').classList.remove('hidden');
-                
-                document.getElementById('fonctionnalitesClient').classList.add('hidden');
-                document.getElementById('fonctionnalitesProprietaire').classList.remove('hidden');
-                
-                document.getElementById('prixClient').classList.add('hidden');
-                document.getElementById('prixProprietaire').classList.remove('hidden');
-                
-                document.getElementById('question7Client').classList.add('hidden');
-                document.getElementById('question7Proprietaire').classList.remove('hidden');
-                
-                document.getElementById('questionInteret').textContent = '4. SOIF pour ton business ? 🚀';
-                document.getElementById('questionFonctionnalites').textContent = '5. Quels outils t\'intéressent le plus ? ⭐';
-                document.getElementById('questionPrix').textContent = '6. Quel budget marketing/mois ? 💰';
-                
-            } else {
-                document.getElementById('questionsClient').classList.remove('hidden');
-                document.getElementById('questionsProprietaire').classList.add('hidden');
-                
-                document.getElementById('conceptClient').classList.remove('hidden');
-                document.getElementById('conceptProprietaire').classList.add('hidden');
-                
-                document.getElementById('interetClient').classList.remove('hidden');
-                document.getElementById('interetProprietaire').classList.add('hidden');
-                
-                document.getElementById('fonctionnalitesClient').classList.remove('hidden');
-                document.getElementById('fonctionnalitesProprietaire').classList.add('hidden');
-                
-                document.getElementById('prixClient').classList.remove('hidden');
-                document.getElementById('prixProprietaire').classList.add('hidden');
-                
-                document.getElementById('question7Client').classList.remove('hidden');
-                document.getElementById('question7Proprietaire').classList.add('hidden');
-                
-                document.getElementById('questionInteret').textContent = '4. Ça te branche ? 🚀';
-                document.getElementById('questionFonctionnalites').textContent = '5. Qu\'est-ce qui te fait le plus envie ? ⭐';
-                document.getElementById('questionPrix').textContent = '6. Tu paierais combien ? 💰';
-            }
-            
-            updateProgress();
-        }
+        // Gestion des inputs text
+        document.querySelectorAll('input[type="text"], input[type="email"]').forEach(input => {
+            input.addEventListener('input', function() {
+                formData[this.name] = this.value;
+                updateProgress();
+            });
+        });
 
+        // Mise à jour de la progression
         function updateProgress() {
-            const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
-            let requiredAnswers = [];
+            const requiredAnswers = ['age', 'frequence', 'recherche', 'interet', 'prix', 'notifications', 'recommandation', 'contact'];
+            const answeredCount = requiredAnswers.filter(q => 
+                formData[q] && (Array.isArray(formData[q]) ? formData[q].length > 0 : true)
+            ).length;
             
-            if (isProprietaire) {
-                requiredAnswers = ['profil_type', 'type_bar', 'zone_bar', 'clientele_bar', 'marketing_actuel', 'budget_marketing', 'defis_bar', 'interet_bar', 'fonctionnalites_bar', 'prix_bar', 'objectif_clients', 'recommandation', 'contact', 'email'];
+            // Ajouter ville si remplie
+            if (formData.ville && formData.ville.length > 0) {
+                const progress = ((answeredCount + 1) / (requiredAnswers.length + 1)) * 100;
+                document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
             } else {
-                requiredAnswers = ['profil_type', 'age', 'frequence', 'recherche', 'interet', 'fonctionnalites', 'prix', 'notifications', 'recommandation', 'contact', 'email'];
-            }
-            
-            const answeredCount = requiredAnswers.filter(q => {
-                if (q === 'email') return formData.email && formData.email.includes('@');
-                return formData[q] && (Array.isArray(formData[q]) ? formData[q].length > 0 : true);
-            }).length;
-            
-            const progress = (answeredCount / requiredAnswers.length) * 100;
-            document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
-        }
-
-        async function envoyerVersGoogleSheets(data) {
-            console.log('Envoi vers Google Sheets...', data);
-            
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(data)
-                });
-                
-                const result = await response.text();
-                console.log('Réponse du serveur:', result);
-                
-                if (response.ok) {
-                    console.log('Envoi réussi');
-                    return true;
-                } else {
-                    throw new Error('Erreur serveur: ' + response.status);
-                }
-                
-            } catch (error) {
-                console.error('Erreur envoi:', error);
-                
-                // Fallback avec formulaire
-                try {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = GOOGLE_SCRIPT_URL;
-                    form.style.display = 'none';
-                    
-                    Object.keys(data).forEach(key => {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = key;
-                        input.value = data[key];
-                        form.appendChild(input);
-                    });
-                    
-                    document.body.appendChild(form);
-                    form.submit();
-                    document.body.removeChild(form);
-                    
-                    return true;
-                } catch (fallbackError) {
-                    console.error('Erreur fallback:', fallbackError);
-                    return false;
-                }
+                const progress = (answeredCount / requiredAnswers.length) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
             }
         }
 
-        async function handleFormSubmit(e) {
+        // Soumission
+        document.getElementById('quickForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Validation rapide
             const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
             
             if (!formData.profil_type) {
-                alert('Dis-nous d\'abord qui tu es !');
+                alert('🎯 Dis-nous d\'abord qui tu es !');
                 return;
             }
             
             if (!formData.email || !formData.email.includes('@')) {
-                alert('Ton email est obligatoire pour l\'étude !');
+                alert('📧 Ton email est obligatoire pour l\'étude !');
                 return;
             }
             
             if (isProprietaire) {
-                const villeBarInput = document.querySelector('input[name="ville_bar"]');
-                if (!villeBarInput || !villeBarInput.value || villeBarInput.value.length < 2) {
-                    alert('N\'oublie pas la ville de ton bar !');
+                if (!formData.ville_bar || formData.ville_bar.length < 2) {
+                    alert('🏪 N\'oublie pas la ville de ton bar !');
                     return;
                 }
-                formData.ville_bar = villeBarInput.value;
+                if (!formData.interet_bar) {
+                    alert('⚡ Il manque ton avis sur SOIF !');
+                    return;
+                }
             } else {
-                const villeInput = document.querySelector('input[name="ville"]');
-                if (!villeInput || !villeInput.value || villeInput.value.length < 2) {
-                    alert('N\'oublie pas ta ville !');
+                if (!formData.ville || formData.ville.length < 2) {
+                    alert('🏙️ N\'oublie pas ta ville !');
                     return;
                 }
-                formData.ville = villeInput.value;
+                if (!formData.age || !formData.interet) {
+                    alert('⚡ Il manque quelques réponses importantes !');
+                    return;
+                }
             }
             
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerHTML = '⏳ Envoi en cours...';
             submitBtn.disabled = true;
             
-            const dataToSend = {
-                timestamp: new Date().toISOString(),
-                ...formData,
-                recherche: Array.isArray(formData.recherche) ? formData.recherche.join(', ') : formData.recherche || '',
-                clientele_bar: Array.isArray(formData.clientele_bar) ? formData.clientele_bar.join(', ') : formData.clientele_bar || '',
-                marketing_actuel: Array.isArray(formData.marketing_actuel) ? formData.marketing_actuel.join(', ') : formData.marketing_actuel || '',
-                defis_bar: Array.isArray(formData.defis_bar) ? formData.defis_bar.join(', ') : formData.defis_bar || '',
-                fonctionnalites: Array.isArray(formData.fonctionnalites) ? formData.fonctionnalites.join(', ') : formData.fonctionnalites || '',
-                fonctionnalites_bar: Array.isArray(formData.fonctionnalites_bar) ? formData.fonctionnalites_bar.join(', ') : formData.fonctionnalites_bar || ''
-            };
-            
-            const success = await envoyerVersGoogleSheets(dataToSend);
-            
-            if (success) {
-                submitBtn.innerHTML = '✅ Merci ! C\'était rapide';
-                submitBtn.style.background = '#28a745';
-                
-                setTimeout(() => {
-                    showSuccessMessage();
-                }, 1000);
-            } else {
-                submitBtn.innerHTML = '❌ Erreur - Réessaie';
+            // 🚀 ENVOI VERS GOOGLE APPS SCRIPT
+            fetch('https://script.google.com/macros/s/AKfycbyQfpF5M4iq1dkdp_n6DG_uYPeXIEb9dXdZrOwC2fLL1d71uXSTHVU7zPGSsqadTZdLFQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    submitBtn.innerHTML = '✅ Merci ! C\'était rapide 🚀';
+                    submitBtn.style.background = '#28a745';
+                    
+                    // Affichage du message de confirmation
+                    setTimeout(() => {
+                        const confirmation = document.createElement('div');
+                        confirmation.style.cssText = `
+                            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                            background: white; padding: 30px; border-radius: 15px;
+                            box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; z-index: 1000;
+                            max-width: 400px;
+                        `;
+                        confirmation.innerHTML = `
+                            <h2 style="color: #667eea; margin-bottom: 15px;">🎉 Parfait !</h2>
+                            <p style="margin-bottom: 15px;">Tes réponses vont nous aider pour Station F !</p>
+                            <p style="font-size: 0.9rem; color: #6c757d;">On te tient au courant très bientôt 🚀</p>
+                            <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">Cool !</button>
+                        `;
+                        document.body.appendChild(confirmation);
+                    }, 1000);
+                } else {
+                    // En cas d'erreur
+                    submitBtn.innerHTML = '❌ Erreur - Réessayer';
+                    submitBtn.style.background = '#dc3545';
+                    submitBtn.disabled = false;
+                    alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                submitBtn.innerHTML = '❌ Erreur - Réessayer';
                 submitBtn.style.background = '#dc3545';
                 submitBtn.disabled = false;
+                alert('Erreur de connexion. Vérifiez votre internet et réessayez.');
+            });
+            setTimeout(() => {
+                submitBtn.innerHTML = '✅ Merci ! C\'était rapide 🚀';
+                submitBtn.style.background = '#28a745';
                 
+                // Message de confirmation
                 setTimeout(() => {
-                    submitBtn.innerHTML = 'Envoyer (2min chrono respecté !)';
-                    submitBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                }, 3000);
-            }
-        }
+                    const confirmation = document.createElement('div');
+                    confirmation.style.cssText = `
+                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: white; padding: 30px; border-radius: 15px;
+                        box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; z-index: 1000;
+                    `;
+                    confirmation.innerHTML = `
+                        <h2 style="color: #667eea; margin-bottom: 15px;">🎉 Parfait !</h2>
+                        <p style="margin-bottom: 15px;">Tes réponses vont nous aider pour Station F !</p>
+                        <p style="font-size: 0.9rem; color: #6c757d;">On te tient au courant très bientôt 🚀</p>
+                        <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">Cool !</button>
+                    `;
+                    document.body.appendChild(confirmation);
+                }, 1000);
+            }, 1500);
+        });
 
-        function showSuccessMessage() {
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            
-            const successDiv = document.createElement('div');
-            successDiv.className = 'success-message';
-            successDiv.innerHTML = `
-                <h2 style="color: #667eea; margin-bottom: 15px;">Parfait !</h2>
-                <p style="margin-bottom: 15px;">Tes réponses vont nous aider pour Station F !</p>
-                <p style="font-size: 0.9rem; color: #6c757d;">On te tient au courant très bientôt</p>
-                <button onclick="closeSuccessMessage()" style="margin-top: 15px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">Cool !</button>
-            `;
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(successDiv);
-        }
-
-        function closeSuccessMessage() {
-            const overlay = document.querySelector('.overlay');
-            const successMessage = document.querySelector('.success-message');
-            if (overlay) overlay.remove();
-            if (successMessage) successMessage.remove();
-        }
+        // Animation d'entrée
+        setTimeout(() => {
+            document.querySelector('.form-container').style.transform = 'scale(1)';
+            document.querySelector('.form-container').style.opacity = '1';
+        }, 100);
     </script>
 </body>
 </html>
