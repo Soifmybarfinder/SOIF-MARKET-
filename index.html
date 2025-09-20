@@ -242,7 +242,7 @@
                         <button type="button" class="quick-btn" data-value="30-35">30-35 ans</button>
                         <button type="button" class="quick-btn" data-value="36+">36+ ans</button>
                     </div>
-                    <input type="text" class="form-input" name="ville" placeholder="Ta ville (ex: Montpellier, Lyon...)" required>
+                    <input type="text" class="form-input" name="ville" placeholder="Ta ville (ex: Montpellier, Lyon...)" >
                 </div>
 
                 <!-- Question 2: Habitudes CLIENT -->
@@ -289,7 +289,7 @@
                 <!-- Question 2: Localisation BAR -->
                 <div class="question-block">
                     <div class="question-title">2. Où es-tu situé ? 📍</div>
-                    <input type="text" class="form-input" name="ville_bar" placeholder="Ville de ton bar" required>
+                    <input type="text" class="form-input" name="ville_bar" placeholder="Ville de ton bar" >
                     <div class="quick-select" data-question="zone_bar">
                         <button type="button" class="quick-btn" data-value="centre-ville">Centre-ville</button>
                         <button type="button" class="quick-btn" data-value="quartier-etudiant">Quartier étudiant</button>
@@ -464,7 +464,7 @@
             <!-- Contact et Email -->
             <div class="question-block">
                 <div class="question-title">9. Ton email pour qu'on te tienne au courant ? 📧</div>
-                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" required>
+                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" >
                 <div class="quick-select" data-question="contact">
                     <button type="button" class="quick-btn" data-value="beta">Oui + bêta test prioritaire</button>
                     <button type="button" class="quick-btn" data-value="infos">Juste les infos de lancement</button>
@@ -618,23 +618,23 @@
 
         function updateProgress() {
             const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
-            let requiredAnswers = [];
+            let Answers = [];
             
             if (isProprietaire) {
-                requiredAnswers = ['profil_type', 'type_bar', 'zone_bar', 'clientele_bar', 'marketing_actuel', 'budget_marketing', 'defis_bar', 'interet_bar', 'fonctionnalites_bar', 'prix_bar', 'objectif_clients', 'recommandation', 'contact', 'email'];
+                Answers = ['profil_type', 'type_bar', 'zone_bar', 'clientele_bar', 'marketing_actuel', 'budget_marketing', 'defis_bar', 'interet_bar', 'fonctionnalites_bar', 'prix_bar', 'objectif_clients', 'recommandation', 'contact', 'email'];
             } else {
-                requiredAnswers = ['profil_type', 'age', 'frequence', 'recherche', 'interet', 'fonctionnalites', 'prix', 'notifications', 'recommandation', 'contact', 'email'];
+                Answers = ['profil_type', 'age', 'frequence', 'recherche', 'interet', 'fonctionnalites', 'prix', 'notifications', 'recommandation', 'contact', 'email'];
             }
             
-            const answeredCount = requiredAnswers.filter(q => {
+            const answeredCount = Answers.filter(q => {
                 if (q === 'email') return formData.email && formData.email.includes('@');
                 return formData[q] && (Array.isArray(formData[q]) ? formData[q].length > 0 : true);
             }).length;
             
-            const progress = (answeredCount / requiredAnswers.length) * 100;
+            const progress = (answeredCount / Answers.length) * 100;
             document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
             
-            console.log('📊 Progression:', Math.round(progress) + '%', `(${answeredCount}/${requiredAnswers.length})`);
+            console.log('📊 Progression:', Math.round(progress) + '%', `(${answeredCount}/${Answers.length})`);
         }
 
         async function envoyerVersGoogleSheets(data) {
@@ -669,7 +669,16 @@
                 alert('🎯 Dis-nous d\'abord qui tu es !');
                 return;
             }
-            
+            if (!formData.profil_type) {
+  alert('🎯 Dis-nous d\'abord qui tu es !');
+  return;
+}
+
+if (!formData.email || !formData.email.includes('@')) {
+  alert('📧 Ton email est obligatoire pour l\'étude !');
+  return;
+}
+
             if (!formData.email || !formData.email.includes('@')) {
                 alert('📧 Ton email est obligatoire pour l\'étude !');
                 return;
