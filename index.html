@@ -1,4 +1,18 @@
-<!DOCTYPE html>
+async function envoyerVersGoogleSheets(data) {
+            console.log('📤 Envoi vers Google Sheets...');
+            console.log('📋 Données:', data);
+            console.log('        async function envoyerVersGoogleSheets(data) {
+            console.log('📤 Envoi vers Google Sheets...', JSON.stringify(data, null, 2));
+            console.log('🔗 URL utilisée:', GOOGLE_SCRIPT_URL);
+            
+            try {
+                // Test d'abord si l'URL est accessible
+                console.log('🔍 Test de l'URL...');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -485,8 +499,8 @@
     <script>
         const formData = {};
         
-        // URL Google Apps Script configurée - NOUVELLE URL CORRECTE
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYyHFL7CiUJ6gok47buvWpfFHhFJ82Q7LI-MxK4efbZbjyetlhtVPS3HfXgG9KgSjQNQ/exec';
+        // URL Google Apps Script configurée - NOUVELLE URL AVEC ACCÈS PUBLIC
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLO9nGFfoydcjYRYrCoR5F4JYkp1Krjge2XdBOvqmm2EQPXdvQLX2RU6sbMnOd38vT_g/exec';
 
         // Initialisation au chargement
         document.addEventListener('DOMContentLoaded', function() {
@@ -519,8 +533,17 @@
                 });
             });
 
-            // Gestion de la soumission
-            document.getElementById('quickForm').addEventListener('submit', handleFormSubmit);
+            // Gestion de la soumission du formulaire
+            document.getElementById('quickForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFormSubmit(e);
+            });
+            
+            // Gestion alternative du bouton submit
+            document.getElementById('submitBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                handleFormSubmit(e);
+            });
         }
 
         function handleProfilTypeSelection(profilType) {
@@ -660,37 +683,38 @@
 
         async function handleFormSubmit(e) {
             e.preventDefault();
-            console.log('🚀 Soumission du formulaire...');
+            console.log('🚀 BOUTON ENVOYER CLIQUÉ - Soumission du formulaire...');
+            
+            // Debug: afficher toutes les données actuelles
+            console.log('📋 Données actuelles du formulaire:', formData);
             
             // Validation
             const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
             
             if (!formData.profil_type) {
                 alert('🎯 Dis-nous d\'abord qui tu es !');
+                console.log('❌ Validation échouée: profil_type manquant');
                 return;
             }
             
             if (!formData.email || !formData.email.includes('@')) {
                 alert('📧 Ton email est obligatoire pour l\'étude !');
+                console.log('❌ Validation échouée: email manquant ou invalide');
                 return;
             }
+            
+            console.log('✅ Validation de base réussie, profil:', isProprietaire ? 'Propriétaire' : 'Client');
             
             if (isProprietaire) {
                 if (!formData.ville_bar || formData.ville_bar.length < 2) {
                     alert('🏪 N\'oublie pas la ville de ton bar !');
-                    return;
-                }
-                if (!formData.interet_bar) {
-                    alert('⚡ Il manque ton avis sur SOIF !');
+                    console.log('❌ Validation échouée: ville_bar manquante');
                     return;
                 }
             } else {
                 if (!formData.ville || formData.ville.length < 2) {
                     alert('🏙️ N\'oublie pas ta ville !');
-                    return;
-                }
-                if (!formData.age || !formData.interet) {
-                    alert('⚡ Il manque quelques réponses importantes !');
+                    console.log('❌ Validation échouée: ville manquante');
                     return;
                 }
             }
@@ -698,6 +722,8 @@
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerHTML = '⏳ Envoi en cours...';
             submitBtn.disabled = true;
+            
+            console.log('📤 Début de l\'envoi...');
             
             // Préparer les données pour Google Sheets
             const dataToSend = {
