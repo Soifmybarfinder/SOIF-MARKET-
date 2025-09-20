@@ -599,34 +599,44 @@
         }
 
         async function envoyerVersGoogleSheets(data) {
-            console.log('Envoi vers Google Sheets...');
+            console.log('Envoi vers Google Sheets...', data);
             
             try {
-                const formData = new FormData();
-                formData.append('data', JSON.stringify(data));
-                
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
                 });
                 
-                console.log('Envoi réussi');
-                return true;
+                const result = await response.text();
+                console.log('Réponse du serveur:', result);
+                
+                if (response.ok) {
+                    console.log('Envoi réussi');
+                    return true;
+                } else {
+                    throw new Error('Erreur serveur: ' + response.status);
+                }
                 
             } catch (error) {
                 console.error('Erreur envoi:', error);
                 
+                // Fallback avec formulaire
                 try {
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = GOOGLE_SCRIPT_URL;
-                    form.target = '_blank';
                     form.style.display = 'none';
                     
-                    const input = document.createElement('input');
-                    input.name = 'data';
-                    input.value = JSON.stringify(data);
-                    form.appendChild(input);
+                    Object.keys(data).forEach(key => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = data[key];
+                        form.appendChild(input);
+                    });
                     
                     document.body.appendChild(form);
                     form.submit();
@@ -634,6 +644,7 @@
                     
                     return true;
                 } catch (fallbackError) {
+                    console.error('Erreur fallback:', fallbackError);
                     return false;
                 }
             }
@@ -655,15 +666,19 @@
             }
             
             if (isProprietaire) {
-                if (!formData.ville_bar || formData.ville_bar.length < 2) {
+                const villeBarInput = document.querySelector('input[name="ville_bar"]');
+                if (!villeBarInput || !villeBarInput.value || villeBarInput.value.length < 2) {
                     alert('N\'oublie pas la ville de ton bar !');
                     return;
                 }
+                formData.ville_bar = villeBarInput.value;
             } else {
-                if (!formData.ville || formData.ville.length < 2) {
+                const villeInput = document.querySelector('input[name="ville"]');
+                if (!villeInput || !villeInput.value || villeInput.value.length < 2) {
                     alert('N\'oublie pas ta ville !');
                     return;
                 }
+                formData.ville = villeInput.value;
             }
             
             const submitBtn = document.getElementById('submitBtn');
