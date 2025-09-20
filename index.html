@@ -577,7 +577,12 @@
                 document.getElementById('questionFonctionnalites').textContent = '5. Qu\'est-ce qui te fait le plus envie ? ⭐';
                 document.getElementById('questionPrix').textContent = '6. Tu paierais combien ? 💰';
             }
-            
+            //document.querySelectorAll('.hidden input').forEach(input => {
+    input.disabled = true;
+  });
+  document.querySelectorAll(':not(.hidden) input').forEach(input => {
+    input.disabled = false;
+  });       
             updateProgress();
         }
 
