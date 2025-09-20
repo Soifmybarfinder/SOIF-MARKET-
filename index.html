@@ -107,6 +107,7 @@
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.2s ease;
+            margin-top: 10px;
         }
 
         .form-input:focus {
@@ -148,6 +149,12 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .progress-bar {
             height: 4px;
             background: rgba(255,255,255,0.3);
@@ -165,6 +172,30 @@
 
         .hidden {
             display: none;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
         }
 
         @media (max-width: 600px) {
@@ -189,7 +220,7 @@
             </div>
         </div>
 
-        <form class="form-content" id="1yA5WOkIkB-tkNTzzGcRYs9vI5Ud_i1Q6H-hD3HztRWj91hETf3Tfl92J">
+        <form class="form-content" id="quickForm">
             <!-- Question 0: Type de répondant -->
             <div class="question-block">
                 <div class="question-title">Es-tu... ? 🎯</div>
@@ -245,7 +276,7 @@
                 <div class="question-block">
                     <div class="question-title">1. Ton bar c'est quoi ? 🏪</div>
                     <input type="text" class="form-input" name="nom_bar" placeholder="Nom de ton établissement">
-                    <div class="quick-select" data-question="type_bar" style="margin-top: 10px;">
+                    <div class="quick-select" data-question="type_bar">
                         <button type="button" class="quick-btn" data-value="pub">Pub</button>
                         <button type="button" class="quick-btn" data-value="cocktails">Bar à cocktails</button>
                         <button type="button" class="quick-btn" data-value="brasserie">Brasserie</button>
@@ -259,7 +290,7 @@
                 <div class="question-block">
                     <div class="question-title">2. Où es-tu situé ? 📍</div>
                     <input type="text" class="form-input" name="ville_bar" placeholder="Ville de ton bar" required>
-                    <div class="quick-select" data-question="zone_bar" style="margin-top: 10px;">
+                    <div class="quick-select" data-question="zone_bar">
                         <button type="button" class="quick-btn" data-value="centre-ville">Centre-ville</button>
                         <button type="button" class="quick-btn" data-value="quartier-etudiant">Quartier étudiant</button>
                         <button type="button" class="quick-btn" data-value="quartier-affaires">Quartier affaires</button>
@@ -324,7 +355,7 @@
                     <p style="font-size: 0.9rem; line-height: 1.4;">
                         Une app qui trouve TON bar idéal avec 140+ filtres ultra-précis 
                         (ambiance, musique, clientèle...) + réseau social géolocalisé 
-                        pour retrouver tes amis en temps réel 📍
+                        pour retrouver tes amis en temps réel 📱
                     </p>
                 </div>
                 <div id="conceptProprietaire" class="hidden">
@@ -433,7 +464,7 @@
             <!-- Contact et Email -->
             <div class="question-block">
                 <div class="question-title">9. Ton email pour qu'on te tienne au courant ? 📧</div>
-                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" required style="margin-bottom: 10px;">
+                <input type="email" class="form-input" name="email" placeholder="ton.email@exemple.com" required>
                 <div class="quick-select" data-question="contact">
                     <button type="button" class="quick-btn" data-value="beta">Oui + bêta test prioritaire</button>
                     <button type="button" class="quick-btn" data-value="infos">Juste les infos de lancement</button>
@@ -453,129 +484,185 @@
 
     <script>
         const formData = {};
-        let answeredQuestions = 0;
-        const totalQuestions = 8;
+        
+        // URL Google Apps Script configurée
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQfpF5M4iq1dkdp_n6DG_uYPeXIEb9dXdZrOwC2fLL1d71uXSTHVU7zPGSsqadTZdLFQ/exec';
 
-        // Gestion du type de profil
-        document.querySelectorAll('[data-question="profil_type"] .quick-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const profilType = this.dataset.value;
-                
-                // Cacher/Afficher les sections appropriées
-                if (profilType === 'proprietaire' || profilType === 'employe') {
-                    document.getElementById('questionsClient').classList.add('hidden');
-                    document.getElementById('questionsProprietaire').classList.remove('hidden');
-                    
-                    document.getElementById('conceptClient').classList.add('hidden');
-                    document.getElementById('conceptProprietaire').classList.remove('hidden');
-                    
-                    document.getElementById('interetClient').classList.add('hidden');
-                    document.getElementById('interetProprietaire').classList.remove('hidden');
-                    
-                    document.getElementById('fonctionnalitesClient').classList.add('hidden');
-                    document.getElementById('fonctionnalitesProprietaire').classList.remove('hidden');
-                    
-                    document.getElementById('prixClient').classList.add('hidden');
-                    document.getElementById('prixProprietaire').classList.remove('hidden');
-                    
-                    document.getElementById('question7Client').classList.add('hidden');
-                    document.getElementById('question7Proprietaire').classList.remove('hidden');
-                    
-                    // Mettre à jour les titres
-                    document.getElementById('questionInteret').textContent = '4. SOIF pour ton business ? 🚀';
-                    document.getElementById('questionFonctionnalites').textContent = '5. Quels outils t\'intéressent le plus ? ⭐';
-                    document.getElementById('questionPrix').textContent = '6. Quel budget marketing/mois ? 💰';
-                    
-                } else {
-                    document.getElementById('questionsClient').classList.remove('hidden');
-                    document.getElementById('questionsProprietaire').classList.add('hidden');
-                    
-                    document.getElementById('conceptClient').classList.remove('hidden');
-                    document.getElementById('conceptProprietaire').classList.add('hidden');
-                    
-                    document.getElementById('interetClient').classList.remove('hidden');
-                    document.getElementById('interetProprietaire').classList.add('hidden');
-                    
-                    document.getElementById('fonctionnalitesClient').classList.remove('hidden');
-                    document.getElementById('fonctionnalitesProprietaire').classList.add('hidden');
-                    
-                    document.getElementById('prixClient').classList.remove('hidden');
-                    document.getElementById('prixProprietaire').classList.add('hidden');
-                    
-                    document.getElementById('question7Client').classList.remove('hidden');
-                    document.getElementById('question7Proprietaire').classList.add('hidden');
-                    
-                    // Remettre les titres clients
-                    document.getElementById('questionInteret').textContent = '4. Ça te branche ? 🚀';
-                    document.getElementById('questionFonctionnalites').textContent = '5. Qu\'est-ce qui te fait le plus envie ? ⭐';
-                    document.getElementById('questionPrix').textContent = '6. Tu paierais combien ? 💰';
-                }
-            });
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 SOIF Questionnaire initialisé');
+            console.log('📊 Google Sheet URL configurée:', GOOGLE_SCRIPT_URL);
+            setupEventListeners();
         });
-        document.querySelectorAll('.quick-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
+
+        function setupEventListeners() {
+            // Gestion du type de profil
+            document.querySelectorAll('[data-question="profil_type"] .quick-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    handleProfilTypeSelection(this.dataset.value);
+                });
+            });
+
+            // Gestion des boutons de sélection
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    handleButtonClick(this);
+                });
+            });
+
+            // Gestion des inputs text/email
+            document.querySelectorAll('input[type="text"], input[type="email"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    formData[this.name] = this.value;
+                    updateProgress();
+                });
+            });
+
+            // Gestion de la soumission
+            document.getElementById('quickForm').addEventListener('submit', handleFormSubmit);
+        }
+
+        function handleProfilTypeSelection(profilType) {
+            formData.profil_type = profilType;
+            console.log('👤 Profil sélectionné:', profilType);
+            
+            if (profilType === 'proprietaire' || profilType === 'employe') {
+                // Afficher sections propriétaires
+                document.getElementById('questionsClient').classList.add('hidden');
+                document.getElementById('questionsProprietaire').classList.remove('hidden');
                 
-                const questionGroup = this.closest('.quick-select');
-                const questionName = questionGroup.dataset.question;
-                const value = this.dataset.value;
-                const isMultiple = questionGroup.dataset.multiple === 'true';
+                document.getElementById('conceptClient').classList.add('hidden');
+                document.getElementById('conceptProprietaire').classList.remove('hidden');
                 
-                if (isMultiple) {
-                    // Multi-sélection
-                    this.classList.toggle('selected');
-                    if (!formData[questionName]) formData[questionName] = [];
-                    
-                    if (this.classList.contains('selected')) {
-                        if (!formData[questionName].includes(value)) {
-                            formData[questionName].push(value);
-                        }
-                    } else {
-                        formData[questionName] = formData[questionName].filter(v => v !== value);
+                document.getElementById('interetClient').classList.add('hidden');
+                document.getElementById('interetProprietaire').classList.remove('hidden');
+                
+                document.getElementById('fonctionnalitesClient').classList.add('hidden');
+                document.getElementById('fonctionnalitesProprietaire').classList.remove('hidden');
+                
+                document.getElementById('prixClient').classList.add('hidden');
+                document.getElementById('prixProprietaire').classList.remove('hidden');
+                
+                document.getElementById('question7Client').classList.add('hidden');
+                document.getElementById('question7Proprietaire').classList.remove('hidden');
+                
+                // Mettre à jour les titres
+                document.getElementById('questionInteret').textContent = '4. SOIF pour ton business ? 🚀';
+                document.getElementById('questionFonctionnalites').textContent = '5. Quels outils t\'intéressent le plus ? ⭐';
+                document.getElementById('questionPrix').textContent = '6. Quel budget marketing/mois ? 💰';
+                
+            } else {
+                // Afficher sections clients
+                document.getElementById('questionsClient').classList.remove('hidden');
+                document.getElementById('questionsProprietaire').classList.add('hidden');
+                
+                document.getElementById('conceptClient').classList.remove('hidden');
+                document.getElementById('conceptProprietaire').classList.add('hidden');
+                
+                document.getElementById('interetClient').classList.remove('hidden');
+                document.getElementById('interetProprietaire').classList.add('hidden');
+                
+                document.getElementById('fonctionnalitesClient').classList.remove('hidden');
+                document.getElementById('fonctionnalitesProprietaire').classList.add('hidden');
+                
+                document.getElementById('prixClient').classList.remove('hidden');
+                document.getElementById('prixProprietaire').classList.add('hidden');
+                
+                document.getElementById('question7Client').classList.remove('hidden');
+                document.getElementById('question7Proprietaire').classList.add('hidden');
+                
+                // Remettre les titres clients
+                document.getElementById('questionInteret').textContent = '4. Ça te branche ? 🚀';
+                document.getElementById('questionFonctionnalites').textContent = '5. Qu\'est-ce qui te fait le plus envie ? ⭐';
+                document.getElementById('questionPrix').textContent = '6. Tu paierais combien ? 💰';
+            }
+            
+            updateProgress();
+        }
+
+        function handleButtonClick(btn) {
+            const questionGroup = btn.closest('.quick-select');
+            const questionName = questionGroup.dataset.question;
+            const value = btn.dataset.value;
+            const isMultiple = questionGroup.dataset.multiple === 'true';
+            
+            if (isMultiple) {
+                // Multi-sélection
+                btn.classList.toggle('selected');
+                if (!formData[questionName]) formData[questionName] = [];
+                
+                if (btn.classList.contains('selected')) {
+                    if (!formData[questionName].includes(value)) {
+                        formData[questionName].push(value);
                     }
                 } else {
-                    // Sélection unique
-                    questionGroup.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
-                    this.classList.add('selected');
-                    formData[questionName] = value;
+                    formData[questionName] = formData[questionName].filter(v => v !== value);
                 }
-                
-                // Afficher email si nécessaire - SUPPRIMÉ car email toujours visible
-                
-                updateProgress();
-            });
-        });
-
-        // Gestion des inputs text
-        document.querySelectorAll('input[type="text"], input[type="email"]').forEach(input => {
-            input.addEventListener('input', function() {
-                formData[this.name] = this.value;
-                updateProgress();
-            });
-        });
-
-        // Mise à jour de la progression
-        function updateProgress() {
-            const requiredAnswers = ['age', 'frequence', 'recherche', 'interet', 'prix', 'notifications', 'recommandation', 'contact'];
-            const answeredCount = requiredAnswers.filter(q => 
-                formData[q] && (Array.isArray(formData[q]) ? formData[q].length > 0 : true)
-            ).length;
-            
-            // Ajouter ville si remplie
-            if (formData.ville && formData.ville.length > 0) {
-                const progress = ((answeredCount + 1) / (requiredAnswers.length + 1)) * 100;
-                document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
             } else {
-                const progress = (answeredCount / requiredAnswers.length) * 100;
-                document.getElementById('progressFill').style.width = progress + '%';
+                // Sélection unique
+                questionGroup.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                formData[questionName] = value;
+                
+                // Gestion spéciale pour le type de profil
+                if (questionName === 'profil_type') {
+                    handleProfilTypeSelection(value);
+                    return;
+                }
+            }
+            
+            console.log('✅ Réponse enregistrée:', questionName, '=', formData[questionName]);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
+            let requiredAnswers = [];
+            
+            if (isProprietaire) {
+                requiredAnswers = ['profil_type', 'type_bar', 'zone_bar', 'clientele_bar', 'marketing_actuel', 'budget_marketing', 'defis_bar', 'interet_bar', 'fonctionnalites_bar', 'prix_bar', 'objectif_clients', 'recommandation', 'contact', 'email'];
+            } else {
+                requiredAnswers = ['profil_type', 'age', 'frequence', 'recherche', 'interet', 'fonctionnalites', 'prix', 'notifications', 'recommandation', 'contact', 'email'];
+            }
+            
+            const answeredCount = requiredAnswers.filter(q => {
+                if (q === 'email') return formData.email && formData.email.includes('@');
+                return formData[q] && (Array.isArray(formData[q]) ? formData[q].length > 0 : true);
+            }).length;
+            
+            const progress = (answeredCount / requiredAnswers.length) * 100;
+            document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
+            
+            console.log('📊 Progression:', Math.round(progress) + '%', `(${answeredCount}/${requiredAnswers.length})`);
+        }
+
+        async function envoyerVersGoogleSheets(data) {
+            console.log('📤 Envoi vers Google Sheets...', data);
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('✅ Envoi réussi vers Google Sheets');
+                return true; // no-cors ne retourne pas de réponse lisible
+            } catch (error) {
+                console.error('❌ Erreur envoi Google Sheets:', error);
+                return false;
             }
         }
 
-        // Soumission
-        document.getElementById('quickForm').addEventListener('submit', function(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
+            console.log('🚀 Soumission du formulaire...');
             
-            // Validation rapide
+            // Validation
             const isProprietaire = formData.profil_type === 'proprietaire' || formData.profil_type === 'employe';
             
             if (!formData.profil_type) {
@@ -612,77 +699,110 @@
             submitBtn.innerHTML = '⏳ Envoi en cours...';
             submitBtn.disabled = true;
             
-            // COLLECTE DES DONNÉES - À REMPLACER PAR VOTRE SOLUTION
-            console.log('📊 Données collectées:', formData);
+            // Préparer les données pour Google Sheets
+            const dataToSend = {
+                timestamp: new Date().toISOString(),
+                ...formData,
+                // Convertir les arrays en strings pour Google Sheets
+                recherche: Array.isArray(formData.recherche) ? formData.recherche.join(', ') : formData.recherche || '',
+                clientele_bar: Array.isArray(formData.clientele_bar) ? formData.clientele_bar.join(', ') : formData.clientele_bar || '',
+                marketing_actuel: Array.isArray(formData.marketing_actuel) ? formData.marketing_actuel.join(', ') : formData.marketing_actuel || '',
+                defis_bar: Array.isArray(formData.defis_bar) ? formData.defis_bar.join(', ') : formData.defis_bar || '',
+                fonctionnalites: Array.isArray(formData.fonctionnalites) ? formData.fonctionnalites.join(', ') : formData.fonctionnalites || '',
+                fonctionnalites_bar: Array.isArray(formData.fonctionnalites_bar) ? formData.fonctionnalites_bar.join(', ') : formData.fonctionnalites_bar || ''
+            };
             
-            // Option 1: Formspree (gratuit)
-            // fetch('https://formspree.io/f/VOTRE_ID', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(formData)
-            // });
+            console.log('📋 Données finales à envoyer:', dataToSend);
             
-            // Option 2: Google Sheets (via script)
-            // fetch('VOTRE_GOOGLE_SCRIPT_URL', {
-            //     method: 'POST',
-            //     body: JSON.stringify(formData)
-            // });
+            // Envoyer vers Google Sheets
+            const success = await envoyerVersGoogleSheets(dataToSend);
             
-            // Option 3: Airtable
-            // fetch('https://api.airtable.com/v0/BASE_ID/TABLE_NAME', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Authorization': 'Bearer VOTRE_API_KEY',
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({fields: formData})
-            // });
-            
-            // Simulation d'envoi
-            setTimeout(() => {
+            if (success) {
                 submitBtn.innerHTML = '✅ Merci ! C\'était rapide 🚀';
                 submitBtn.style.background = '#28a745';
                 
-                // Message de confirmation
+                console.log('🎉 Formulaire envoyé avec succès !');
+                
+                // Afficher message de confirmation
                 setTimeout(() => {
-                    const confirmation = document.createElement('div');
-                    confirmation.style.cssText = `
-                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                        background: white; padding: 30px; border-radius: 15px;
-                        box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; z-index: 1000;
-                    `;
-                    confirmation.innerHTML = `
-                        <h2 style="color: #667eea; margin-bottom: 15px;">🎉 Parfait !</h2>
-                        <p style="margin-bottom: 15px;">Tes réponses vont nous aider pour Station F !</p>
-                        <p style="font-size: 0.9rem; color: #6c757d;">On te tient au courant très bientôt 🚀</p>
-                        <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">Cool !</button>
-                    `;
-                    document.body.appendChild(confirmation);
+                    showSuccessMessage();
                 }, 1000);
-            }, 1500);
-        });
+            } else {
+                submitBtn.innerHTML = '❌ Erreur - Réessaie';
+                submitBtn.style.background = '#dc3545';
+                submitBtn.disabled = false;
+                
+                console.log('❌ Échec de l\'envoi');
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = '🚀 Envoyer (2min chrono respecté !)';
+                    submitBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                }, 3000);
+            }
+        }
+
+        function showSuccessMessage() {
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = `
+                <h2 style="color: #667eea; margin-bottom: 15px;">🎉 Parfait !</h2>
+                <p style="margin-bottom: 15px;">Tes réponses vont nous aider pour Station F !</p>
+                <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 15px;">
+                    Données envoyées vers Google Sheets avec succès 📊
+                </p>
+                <p style="font-size: 0.9rem; color: #6c757d;">On te tient au courant très bientôt 🚀</p>
+                <button onclick="closeSuccessMessage()" style="margin-top: 15px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">Cool !</button>
+            `;
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(successDiv);
+        }
+
+        function closeSuccessMessage() {
+            const overlay = document.querySelector('.overlay');
+            const successMessage = document.querySelector('.success-message');
+            if (overlay) overlay.remove();
+            if (successMessage) successMessage.remove();
+        }
 
         // Animation d'entrée
         setTimeout(() => {
-            document.querySelector('.form-container').style.transform = 'scale(1)';
-            document.querySelector('.form-container').style.opacity = '1';
+            const container = document.querySelector('.form-container');
+            if (container) {
+                container.style.transform = 'scale(1)';
+                container.style.opacity = '1';
+            }
         }, 100);
-    <script>
-  document.getElementById('formulaire').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const data = {
-      nom: e.target.nom.value,
-      email: e.target.email.value,
-      message: e.target.message.value
-    };
 
-    await fetch('https://script.google.com/u/0/home/projects/1yA5WOkIkB-tkNTzzGcRYs9vI5Ud_i1Q6H-hD3HztRWj91hETf3Tfl92J/edit', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
+        // Test de connexion Google Sheets au chargement (optionnel)
+        async function testConnexionGoogleSheets() {
+            console.log('🔗 Test de connexion Google Sheets...');
+            try {
+                const testData = {
+                    timestamp: new Date().toISOString(),
+                    test: 'connexion'
+                };
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                console.log('✅ Connexion Google Sheets OK');
+            } catch (error) {
+                console.warn('⚠️ Problème de connexion Google Sheets:', error);
+            }
+        }
 
-    alert('Formulaire envoyé !');
-  });
-</script>
+        // Décommenter pour tester la connexion au chargement
+        // testConnexionGoogleSheets();
+    </script>
 </body>
 </html>
